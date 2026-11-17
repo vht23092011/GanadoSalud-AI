@@ -1,0 +1,10 @@
+artifact_location: file:///Users/jaredtrujillo/Documents/Maestri%CC%81a/Cuatrimestre%205/Modulo%202/Fase%20II/GanadoSaludAI/backend/mlruns/324685604748446128/models/m-0cc3b4018c4b433684c7c374911ef21e/artifacts
+creation_timestamp: 1794938190825
+experiment_id: '324685604748446128'
+last_updated_timestamp: 1794938193951
+model_id: m-0cc3b4018c4b433684c7c374911ef21e
+model_type: null
+name: modelo_ganadosalud
+source_run_id: 886eef727e6742589638817ca5e23aee
+status: 2
+status_message: null

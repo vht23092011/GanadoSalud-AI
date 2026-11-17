@@ -1,0 +1,71 @@
+{
+  "filas": 30000,
+  "entrenamiento": 24000,
+  "prueba": 6000,
+  "features": [
+    "Día",
+    "Alimento_Consumido_kg",
+    "Pasos_por_día",
+    "Horas_de_Reposo",
+    "Temperatura_Corp_C",
+    "Nivel_Actividad"
+  ],
+  "clases": [
+    "Enfermo",
+    "Observación",
+    "Sano"
+  ],
+  "accuracy": 0.794,
+  "balanced_accuracy": 0.3328284985782624,
+  "classification_report": {
+    "Enfermo": {
+      "precision": 0.0625,
+      "recall": 0.0016474464579901153,
+      "f1-score": 0.0032102728731942215,
+      "support": 607.0
+    },
+    "Observación": {
+      "precision": 0.07142857142857142,
+      "recall": 0.001644736842105263,
+      "f1-score": 0.003215434083601286,
+      "support": 608.0
+    },
+    "Sano": {
+      "precision": 0.7976549413735343,
+      "recall": 0.9951933124346918,
+      "f1-score": 0.8855416085541609,
+      "support": 4785.0
+    },
+    "accuracy": 0.794,
+    "macro avg": {
+      "precision": 0.3105278376007019,
+      "recall": 0.3328284985782624,
+      "f1-score": 0.29732243850365214,
+      "support": 6000.0
+    },
+    "weighted avg": {
+      "precision": 0.6496908276501555,
+      "recall": 0.794,
+      "f1-score": 0.7068700360814197,
+      "support": 6000.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      1,
+      5,
+      601
+    ],
+    [
+      0,
+      1,
+      607
+    ],
+    [
+      15,
+      8,
+      4762
+    ]
+  ],
+  "nota": "Dataset simulado: métricas no equivalen a validación clínica."
+}

@@ -1,0 +1,36 @@
+groups:
+  - name: ganadosalud_alertas
+
+    rules:
+
+      # API NO DISPONIBLE
+      - alert: GanadoSaludAPIDown
+        expr: up{job="ganadosalud_backend"} == 0
+        for: 1m
+
+        labels:
+          severity: critical
+
+        annotations:
+          summary: "API de GanadoSalud AI no disponible"
+          description: "Prometheus no puede consultar las métricas del backend."
+
+      # LATENCIA ELEVADA
+      - alert: GanadoSaludLatenciaAlta
+        expr: |
+          (
+            sum(rate(gs_request_duration_seconds_bucket{le="0.5"}[5m]))
+            /
+            clamp_min(sum(rate(gs_request_duration_seconds_count[5m])), 0.000001)
+          ) < 0.95
+          and
+          sum(rate(gs_request_duration_seconds_count[5m])) > 0
+
+        for: 2m
+
+        labels:
+          severity: warning
+
+        annotations:
+          summary: "Latencia elevada en GanadoSalud AI"
+          description: "Menos del 95% de las solicitudes cumplen el objetivo de 500 ms."

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/jaredtrujillo/Documents/Maestri%CC%81a/Cuatrimestre%205/Modulo%202/Fase%20II/GanadoSaludAI/backend/mlruns/324685604748446128/886eef727e6742589638817ca5e23aee/artifacts
+end_time: 1794938193956
+entry_point_name: ''
+experiment_id: '324685604748446128'
+lifecycle_stage: active
+run_id: 886eef727e6742589638817ca5e23aee
+run_name: RandomForest_GanadoSalud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794938189483
+status: 3
+tags: []
+user_id: jaredtrujillo
