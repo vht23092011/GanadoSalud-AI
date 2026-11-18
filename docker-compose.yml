@@ -11,10 +11,10 @@ services:
     ports:
       - "8000:8000"
     environment:
-          SIMULAR_LATENCIA: "false"
-          RETRASO_SEGUNDOS: "1.5"
-          SIMULAR_ERROR_500: "true"
-          FRECUENCIA_ERROR: "3"
+      SIMULAR_LATENCIA: "false"
+      RETRASO_SEGUNDOS: "1.5"
+      SIMULAR_ERROR_500: "true"
+      FRECUENCIA_ERROR: "3"
     restart: unless-stopped
 
   # ==================================================
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   # ==================================================
-  # 3. PROMETHEUS - RECOPILACION DE METRICAS
+  # 3. PROMETHEUS - RECOPILACIÓN DE MÉTRICAS
   # ==================================================
   prometheus:
     image: prom/prometheus:latest
@@ -62,7 +62,7 @@ services:
     restart: unless-stopped
 
   # ==================================================
-  # 5. ALERTMANAGER - GESTION DE ALERTAS
+  # 5. ALERTMANAGER - GESTIÓN DE ALERTAS
   # ==================================================
   alertmanager:
     image: prom/alertmanager:latest
@@ -84,7 +84,7 @@ services:
     ports:
       - "5001:5000"
     volumes:
-      # Conserva los experimentos ya registrados
+      # Conserva los experimentos existentes
       - ./backend/mlruns:/app/mlruns
     working_dir: /app
     command:
@@ -97,9 +97,10 @@ services:
       - --port
       - "5000"
     restart: unless-stopped
-  # ==========================================
-  # EVIDENTLY AI - DETECCION DE DATA DRIFT
-  # ==========================================
+
+  # ==================================================
+  # 7. EVIDENTLY AI - DETECCIÓN DE DATA DRIFT
+  # ==================================================
   evidently:
     build:
       context: .
@@ -115,8 +116,38 @@ services:
       - monitoring/drift_detection.py
     profiles:
       - analisis
+
+  # ==================================================
+  # 8. AUTO RECOVERY - RECUPERACIÓN AUTOMÁTICA
+  # ==================================================
+  auto_recovery:
+    build:
+      context: .
+      dockerfile: monitoring/autorecovery/Dockerfile
+    container_name: ganadosalud_auto_recovery
+
+    environment:
+      HEALTH_URL: "http://backend:8000/health"
+      COMPOSE_PROJECT_NAME: "ganadosaludai"
+
+    volumes:
+      # Acceso a Docker Engine para recuperar el backend.
+      # Exclusivamente para pruebas académicas locales.
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      # Conserva los registros de recuperación en el Mac.
+      - ./monitoring/resultados:/app/resultados
+
+    depends_on:
+      - backend
+
+    # Se evita el reinicio automático del propio supervisor
+    # si finaliza después de una recuperación fallida.
+    restart: "no"
+
+
 # ==================================================
-# VOLUMENES PERSISTENTES
+# VOLÚMENES PERSISTENTES
 # ==================================================
 volumes:
   prometheus_data:

@@ -1,0 +1,11 @@
+{"fecha": "2026-11-18T04:54:36.620207+00:00", "evento": "MONITORIZACION_INICIADA", "detalle": "AutoRecovery iniciado desde Docker"}
+{"fecha": "2026-11-18T04:54:36.625237+00:00", "evento": "FALLO_DETECTADO", "detalle": "Fallo 1/3"}
+{"fecha": "2026-11-18T04:54:44.640505+00:00", "evento": "FALLO_DETECTADO", "detalle": "Fallo 2/3"}
+{"fecha": "2026-11-18T04:54:49.687946+00:00", "evento": "SERVICIO_RESTABLECIDO", "detalle": "La API volvió a responder"}
+{"fecha": "2026-11-18T04:55:39.966271+00:00", "evento": "FALLO_DETECTADO", "detalle": "Fallo 1/3"}
+{"fecha": "2026-11-18T04:55:45.040045+00:00", "evento": "FALLO_DETECTADO", "detalle": "Fallo 2/3"}
+{"fecha": "2026-11-18T04:55:50.104536+00:00", "evento": "FALLO_DETECTADO", "detalle": "Fallo 3/3"}
+{"fecha": "2026-11-18T04:55:50.108875+00:00", "evento": "INCIDENTE_CONFIRMADO", "detalle": "INC-004: Backend no disponible"}
+{"fecha": "2026-11-18T04:55:50.109201+00:00", "evento": "RECUPERACION_INICIADA", "detalle": "Iniciando recuperación automática"}
+{"fecha": "2026-11-18T04:55:50.319657+00:00", "evento": "CONTENEDOR_INICIADO", "detalle": "Docker inició el backend detenido"}
+{"fecha": "2026-11-18T04:55:57.325770+00:00", "evento": "SERVICIO_RECUPERADO", "detalle": "HTTP 200 y modelo cargado correctamente"}
