@@ -1,28 +1,38 @@
+
 services:
 
-  # ===================================
-  # BACKEND - GANADOSALUD AI
-  # ===================================
+  # ==================================================
+  # 1. BACKEND - FASTAPI Y RANDOM FOREST
+  # ==================================================
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    environment:
+          SIMULAR_LATENCIA: "false"
+          RETRASO_SEGUNDOS: "1.5"
+          SIMULAR_ERROR_500: "true"
+          FRECUENCIA_ERROR: "3"
     restart: unless-stopped
 
-  # ===================================
-  # FRONTEND - REACT
-  # ===================================
+  # ==================================================
+  # 2. FRONTEND - REACT
+  # ==================================================
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:80"
     depends_on:
       - backend
     restart: unless-stopped
 
-  # ===================================
-  # PROMETHEUS
-  # ===================================
+  # ==================================================
+  # 3. PROMETHEUS - RECOPILACION DE METRICAS
+  # ==================================================
   prometheus:
     image: prom/prometheus:latest
     container_name: ganadosalud_prometheus
@@ -34,26 +44,26 @@ services:
       - prometheus_data:/prometheus
     restart: unless-stopped
 
-  # ===================================
-  # GRAFANA
-  # ===================================
+  # ==================================================
+  # 4. GRAFANA - DASHBOARDS OPERATIVOS
+  # ==================================================
   grafana:
     image: grafana/grafana:latest
     container_name: ganadosalud_grafana
     ports:
       - "3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
     volumes:
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
     restart: unless-stopped
 
-  # ===================================
-  # ALERTMANAGER
-  # ===================================
+  # ==================================================
+  # 5. ALERTMANAGER - GESTION DE ALERTAS
+  # ==================================================
   alertmanager:
     image: prom/alertmanager:latest
     container_name: ganadosalud_alertmanager
@@ -63,7 +73,51 @@ services:
       - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     restart: unless-stopped
 
-
+  # ==================================================
+  # 6. MLFLOW - SEGUIMIENTO DE EXPERIMENTOS
+  # ==================================================
+  mlflow:
+    build:
+      context: ./monitoring/mlflow
+      dockerfile: Dockerfile
+    container_name: ganadosalud_mlflow
+    ports:
+      - "5001:5000"
+    volumes:
+      # Conserva los experimentos ya registrados
+      - ./backend/mlruns:/app/mlruns
+    working_dir: /app
+    command:
+      - mlflow
+      - ui
+      - --backend-store-uri
+      - /app/mlruns
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+    restart: unless-stopped
+  # ==========================================
+  # EVIDENTLY AI - DETECCION DE DATA DRIFT
+  # ==========================================
+  evidently:
+    build:
+      context: .
+      dockerfile: monitoring/evidently/Dockerfile
+    container_name: ganadosalud_evidently
+    working_dir: /app
+    volumes:
+      - ./backend/dataset.csv:/app/backend/dataset.csv:ro
+      - ./monitoring/drift_detection.py:/app/monitoring/drift_detection.py:ro
+      - ./monitoring/resultados:/app/monitoring/resultados
+    command:
+      - python
+      - monitoring/drift_detection.py
+    profiles:
+      - analisis
+# ==================================================
+# VOLUMENES PERSISTENTES
+# ==================================================
 volumes:
   prometheus_data:
   grafana_data:
